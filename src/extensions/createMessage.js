@@ -11,8 +11,16 @@ function createMessage(channel, description, options = {}) {
     embed.setTitle(options.title);
   }
 
+  if (options.image) {
+    embed.setImage(options.image);
+  }
+
   if (options.author) {
     embed.setAuthor(options.author.name, options.author.icon, options.author.URL);
+  }
+
+  if (options.attachments) {
+    embed.attachFiles(options.attachments);
   }
 
   if (options.footer) {
