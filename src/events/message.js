@@ -23,16 +23,34 @@ client.on('message', (msg) => {
       const blacklistedWords = msg.dbClient.blacklistedWords;
       let content = '';
       let footer = {
-        text: msg.createdAt
+        text: msg.createdAt,
+        icon: 'https://i.imgur.com/wryVe0k.jpg'
       };
 
       if (msg.attachments.size > 0) {
-        if (msg.attachments.every(MessageService.isAttachedImage)){
-          content = msg.attachments.first().url;
-          footer.icon = 'https://i.imgur.com/wryVe0k.jpg';
-        }
+        Jimp.read(msg.attachments.first().url)
+          .then(tpl => (
+            Jimp.read('https://i.imgur.com/wryVe0k.jpg').then(logoTpl => {
+              logoTpl.opacity(0.8);
+              logoTpl.resize(640, 480);
+              tpl.resize(1920, 1080);
+              tpl.composite(logoTpl, 1350, 750, [Jimp.BLEND_LIGHTEN, 0.2, 0.2]);
+              tpl.quality(100);
+              tpl.write('src/images/image1.jpg');
+              return sendTo.send({ files: [{
+                attachment: 'src/images/image1.jpg',
+                name: 'image1.png'
+              }]});
+            })
+          ))
 
-      Jimp.read(msg.attachments.first().url)
+          .catch(err => {
+            console.log('Error: ' + err);
+          });
+
+        return;
+      } else if (msg.embeds.length > 0 && msg.embeds[0].type === 'image') {
+        Jimp.read(msg.embeds[0].thumbnail.proxyURL)
         .then(tpl => (
           Jimp.read('https://i.imgur.com/wryVe0k.jpg').then(logoTpl => {
             logoTpl.opacity(0.8);
@@ -52,8 +70,9 @@ client.on('message', (msg) => {
           console.log('Error: ' + err);
         });
 
-      return;
-      } else {
+        return;
+      }
+        else {
         content = msg.cleanContent;
       }
 
@@ -66,8 +85,7 @@ client.on('message', (msg) => {
           content = content.toLowerCase().replace(blacklistedWords[i].toLowerCase(), '');
         }
       }
-
-      console.log('sends non image');
+      
       return sendTo.createMessage(content, { footer: footer });
     }
 

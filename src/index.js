@@ -12,7 +12,7 @@ require('dotenv').config();
   await patron.RequireAll(path.join(__dirname, 'events'));
 
   await client.db.connect(process.env.MONGO_DB_URL);
-  await client.login(process.env.BOT_TOKEN);
+  await client.login('NTEzNzA0OTQzNTA1Mzc1MjMz.DtMXUw.k3oBzZ3lXUgmndy_SUYceUySBRo');
 })()
   .catch(e => Logger.handleError(e));
 

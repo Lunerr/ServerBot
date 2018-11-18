@@ -4,7 +4,7 @@ const Constants = require('../../utility/Constants.js');
 
 function createMessage(channel, description, options = {}) {
   const embed = new discord.RichEmbed()
-    .setColor(options.color !== undefined ? options.color : Random.arrayElement(Constants.data.colors.defaults))
+    .setColor(255, 255, 0)
     .setDescription(description);
 
   if (options.title !== undefined) {
