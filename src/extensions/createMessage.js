@@ -4,7 +4,7 @@ const Constants = require('../utility/Constants.js');
 
 function createMessage(channel, description, options = {}) {
   const embed = new MessageEmbed()
-    .setColor(255, 255, 0)
+    .setColor('#ffff00')
     .setDescription(description);
 
   if (options.title) {

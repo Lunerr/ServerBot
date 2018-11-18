@@ -4,7 +4,7 @@ const Constants = require('../../utility/Constants.js');
 
 function createMessage(channel, description, options = {}) {
   const embed = new discord.RichEmbed()
-    .setColor(255, 255, 0)
+    .setColor('#ffff00')
     .setDescription(description);
 
   if (options.title !== undefined) {
@@ -28,7 +28,7 @@ function createMessage(channel, description, options = {}) {
 
 function createFieldsMessage(channel, fieldsAndValues, inline = true, color = null) {
   const embed = new discord.RichEmbed()
-    .setColor(color !== null ? color : Random.arrayElement(Constants.data.colors.defaults));
+    .setColor('#ffff00');
 
   for (let i = 0; i < fieldsAndValues.length - 1; i++) {
     if (i.isEven()) {
@@ -139,7 +139,7 @@ discord.Message.prototype.tryCreateErrorReply = function (description, options =
 
 discord.Message.prototype.sendEmbed = function (commandEmbed, options = {}) {
   const embed = commandEmbed
-    .setColor(options.color !== undefined ? options.color : Random.arrayElement(Constants.data.colors.defaults));
+    .setColor('#ffff00');
   return this.channel.send({ embed: embed });
 };
 
