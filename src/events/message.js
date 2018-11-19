@@ -13,7 +13,7 @@ client.on('message', (msg) => {
     msg.dbClient = await client.db.clientRepo.getClient(msg.client.user.id);
 
     if (msg.author.bot) {
-      return;
+      // return;
     } else if (msg.content.startsWith(msg.dbClient.prefix) === false && msg.dbClient.channels[msg.channel.id] === undefined) {
       return;
     }
@@ -71,8 +71,37 @@ client.on('message', (msg) => {
         });
 
         return;
-      }
-        else {
+      } else if (msg.embeds.length > 0 && msg.embeds[0].type === 'rich') {
+        if (msg.embeds[0].thumbnail !== null) {
+          Jimp.read(msg.embeds[0].thumbnail.proxyURL)
+          .then(tpl => (
+            Jimp.read('https://i.imgur.com/wryVe0k.jpg').then(logoTpl => {
+              logoTpl.opacity(0.8);
+              logoTpl.resize(640, 480);
+              tpl.resize(1920, 1080);
+              tpl.composite(logoTpl, 1350, 750, [Jimp.BLEND_LIGHTEN, 0.2, 0.2]);
+              tpl.quality(100);
+              tpl.write('src/images/image1.jpg');
+              sendTo.send({ files: [{
+                attachment: 'src/images/image1.jpg',
+                name: 'image1.png'
+              }]});
+            })
+          ))
+  
+          .catch(err => {
+            console.log('Error: ' + err);
+          });
+        }
+          
+        if (msg.embeds[0].description === undefined) {
+          return;
+        }
+
+        if (msg.embeds[0].description !== undefined) {
+          content = msg.embeds[0].description;
+        }
+      } else {
         content = msg.cleanContent;
       }
 
